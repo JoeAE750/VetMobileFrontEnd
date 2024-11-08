@@ -2,5 +2,6 @@ package com.fisi.vetmobile.navigation
 
 enum class VetMobileScreen {
         Home,
-        Login
+        Login,
+        Mascotas
 }

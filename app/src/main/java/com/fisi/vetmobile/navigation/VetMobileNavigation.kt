@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fisi.vetmobile.ui.view.HomeScreen
 import com.fisi.vetmobile.ui.view.LoginScreen
+import com.fisi.vetmobile.ui.view.MascotasScreen
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 
 @Composable
@@ -25,6 +26,9 @@ fun VetMobileApp(
         }
         composable(route = VetMobileScreen.Login.name) {
             LoginScreen(loginViewModel)
+        }
+        composable(route = VetMobileScreen.Mascotas.name) {
+            MascotasScreen()
         }
     }
 }

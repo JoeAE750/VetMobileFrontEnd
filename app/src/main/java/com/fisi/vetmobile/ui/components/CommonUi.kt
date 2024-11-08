@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,7 +27,7 @@ import com.fisi.vetmobile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SysVitaTopBar(
+fun VetMobileTopBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit = {},
     title: String
@@ -56,7 +55,7 @@ fun SysVitaTopBar(
 }
 
 @Composable
-fun SysVitaBottomBar() {
+fun VetMobileBottomBar() {
     BottomAppBar(
         modifier = Modifier.size(height = 55.dp, width = 395.dp)
     ) {

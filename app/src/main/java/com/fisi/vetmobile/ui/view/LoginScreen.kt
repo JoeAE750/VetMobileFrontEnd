@@ -33,8 +33,8 @@ import com.fisi.vetmobile.R
 import com.fisi.vetmobile.ui.components.ConexionUIState
 import com.fisi.vetmobile.ui.components.ErrorScreen
 import com.fisi.vetmobile.ui.components.LoadingScreen
-import com.fisi.vetmobile.ui.components.SysVitaBottomBar
-import com.fisi.vetmobile.ui.components.SysVitaTopBar
+import com.fisi.vetmobile.ui.components.VetMobileBottomBar
+import com.fisi.vetmobile.ui.components.VetMobileTopBar
 import com.fisi.vetmobile.ui.theme.VetMobileTheme
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 
@@ -45,9 +45,9 @@ fun LoginScreen(
 ) {
     val loginUiState by loginViewModel.uiState.collectAsState()
     Scaffold(topBar = {
-        SysVitaTopBar(canNavigateBack = false, title = "Login")
+        VetMobileTopBar(canNavigateBack = false, title = "Login")
     }, bottomBar = {
-        SysVitaBottomBar()
+        VetMobileBottomBar()
     }) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding),

@@ -17,14 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fisi.vetmobile.R
-import com.fisi.vetmobile.ui.components.SysVitaTopBar
+import com.fisi.vetmobile.ui.components.VetMobileTopBar
 import com.fisi.vetmobile.ui.theme.VetMobileTheme
 
 @Composable
 fun HomeScreen(onLoginClick: () -> Unit) {
     //var esEspecialista = false
     Scaffold(topBar = {
-        SysVitaTopBar(
+        VetMobileTopBar(
             canNavigateBack = false,
             navigateUp = {},
             title = "Universidad Nacional Mayor de San Marcos"
