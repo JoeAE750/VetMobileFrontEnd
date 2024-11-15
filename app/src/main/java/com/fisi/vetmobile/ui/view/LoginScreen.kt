@@ -41,85 +41,81 @@ import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel = viewModel(),
-    loginUIConexion: ConexionUIState = ConexionUIState.Success
+    onLoginSuccess: () -> Unit
 ) {
     val loginUiState by loginViewModel.uiState.collectAsState()
-    Scaffold(topBar = {
-        VetMobileTopBar(canNavigateBack = false, title = "Login")
-    }, bottomBar = {
-        VetMobileBottomBar()
-    }) { innerPadding ->
+    val loginUIConexion = loginViewModel.loginUIConexion // Observa el estado de conexión
+
+    Scaffold(
+        topBar = {
+            VetMobileTopBar(canNavigateBack = false, title = "Login")
+        },
+        bottomBar = {
+            VetMobileBottomBar()
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (loginUIConexion) {
                 is ConexionUIState.Success -> {
-
+                    if (loginUiState.isLoginSuccesfull) {
+                        onLoginSuccess() // Navega a la pantalla de Mascotas si el inicio de sesión es exitoso
+                    } else {
+                        // Muestra el formulario de inicio de sesión
+                        LoginForm(loginViewModel)
+                    }
                 }
-
                 is ConexionUIState.Error -> ErrorScreen(modifier = Modifier.fillMaxSize())
                 is ConexionUIState.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
             }
-            val imagePainter = painterResource(id = R.drawable.vet_launcher_foreground)
-            Image(
-                painter = imagePainter,
-                contentDescription = "Icono VetMobile",
-                modifier = Modifier.size(100.dp)
-            )
-
-            Row {
-                Text(text = "username", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                TextField(
-                    value = loginViewModel.username,
-                    onValueChange = { loginViewModel.username = it },
-                    trailingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = "Username") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    keyboardActions = KeyboardActions(onDone = { }),
-                    singleLine = true
-                )
-            }
-
-
-
-            Row {
-                Text(text = "Contraseña", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                TextField(
-                    value = loginViewModel.contrasena,
-                    onValueChange = { loginViewModel.contrasena = it },
-                    trailingIcon = { Icon(Icons.Default.Lock, contentDescription = "Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    keyboardActions = KeyboardActions(onDone = { }),
-                    singleLine = true
-                )
-            }
-
-            Button(onClick = {
-                loginViewModel.validarLogin(
-                    username = loginViewModel.username,
-                    contrasena = loginViewModel.contrasena
-                )
-            }
-            )
-            { Text(text = "Iniciar Sesion", fontSize = 11.sp, fontWeight = FontWeight.Bold) }
-
-
-            Text(
-                text = loginUiState.isLoginSuccesfull.toString(),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }
 
-
-
-@Preview
 @Composable
-fun LoginScreenPreview() {
-    VetMobileTheme(darkTheme = false) {
-        LoginScreen()
+fun LoginForm(loginViewModel: LoginViewModel) {
+    val imagePainter = painterResource(id = R.drawable.vet_launcher_foreground)
+    Image(
+        painter = imagePainter,
+        contentDescription = "Icono VetMobile",
+        modifier = Modifier.size(100.dp)
+    )
+
+    Row {
+        Text(text = "Username", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        TextField(
+            value = loginViewModel.username,
+            onValueChange = { loginViewModel.username = it },
+            trailingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = "Username") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            keyboardActions = KeyboardActions(onDone = { }),
+            singleLine = true
+        )
+    }
+
+    Row {
+        Text(text = "Contraseña", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        TextField(
+            value = loginViewModel.contrasena,
+            onValueChange = { loginViewModel.contrasena = it },
+            trailingIcon = { Icon(Icons.Default.Lock, contentDescription = "Contraseña") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardActions = KeyboardActions(onDone = { }),
+            singleLine = true
+        )
+    }
+
+    Button(
+        onClick = {
+            loginViewModel.validarLogin(
+                username = loginViewModel.username,
+                contrasena = loginViewModel.contrasena
+            )
+        }
+    ) {
+        Text(text = "Iniciar Sesión", fontSize = 11.sp, fontWeight = FontWeight.Bold)
     }
 }

@@ -67,6 +67,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation(libs.androidx.storage)
+    implementation(libs.androidx.annotation)
+    implementation ("com.auth0.android:jwtdecode:2.0.0") // Biblioteca para decodificar el access_token
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

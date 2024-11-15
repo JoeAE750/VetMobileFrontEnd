@@ -6,9 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fisi.vetmobile.ui.view.HomeScreen
 import com.fisi.vetmobile.ui.view.LoginScreen
 import com.fisi.vetmobile.ui.view.MascotasScreen
+import com.fisi.vetmobile.ui.view.RegistrarMascotaScreen
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 
 @Composable
@@ -16,19 +16,25 @@ fun VetMobileApp(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel = viewModel()
 ) {
-
     NavHost(
         navController = navController,
-        startDestination = VetMobileScreen.Home.name,
+        startDestination = VetMobileScreen.Login.name
     ) {
-        composable(route = VetMobileScreen.Home.name) {
-            HomeScreen(onLoginClick = { navController.navigate(VetMobileScreen.Login.name) })
-        }
         composable(route = VetMobileScreen.Login.name) {
-            LoginScreen(loginViewModel)
+            LoginScreen(loginViewModel) {
+                navController.navigate(VetMobileScreen.Mascotas.name)
+            }
         }
         composable(route = VetMobileScreen.Mascotas.name) {
-            MascotasScreen()
+            MascotasScreen(
+                onRegisterMascotaClick = { navController.navigate("register_mascota") }
+            )
+        }
+        composable(route = "register_mascota") {
+            RegistrarMascotaScreen { mascota ->
+                // Aquí podrías manejar el registro de la mascota, enviarla al servidor o almacenarla localmente
+                navController.popBackStack() // Vuelve a la pantalla anterior después de registrar
+            }
         }
     }
 }
