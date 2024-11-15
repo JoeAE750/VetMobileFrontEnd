@@ -217,28 +217,88 @@ fun MascotasList(mascotas: List<Mascotas>) {
 package com.fisi.vetmobile.ui.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material3.Icon
+import androidx.compose.ui.text.font.FontWeight
+import com.fisi.vetmobile.ui.components.VetMobileBottomBar
+
 
 @Composable
-fun MascotasScreen(
-    onRegisterMascotaClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
+fun MascotasScreen() {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /* Add pet action */ },
+                containerColor = Color(0xFF1B5E20),
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+            }
+        },
+        bottomBar = { VetMobileBottomBar() }
     ) {
-        Text(text = "Bienvenido a la sección de Mascotas")
+        MascotasList(Modifier.padding(it))
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = onRegisterMascotaClick) {
-            Text(text = "Registrar Mascota")
+@Composable
+fun MascotasList(modifier: Modifier = Modifier) {
+    val pets = listOf("Max", "Bella", "Rocky", "Luna", "Toby")
+
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(pets) { pet ->
+            MascotaCard(petName = pet, petType = "Perro")
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
+}
+
+@Composable
+fun MascotaCard(petName: String, petType: String) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF263238)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Face,
+                contentDescription = "Pet Icon",
+                modifier = Modifier.size(48.dp),
+                tint = Color(0xFF4CAF50)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(text = petName, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Text(text = petType, fontSize = 14.sp, color = Color.LightGray)
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun PreviewPetApp() {
+    MascotasScreen()
 }

@@ -64,14 +64,11 @@ fun VetMobileApp(
             }
         }
         composable(route = VetMobileScreen.Mascotas.name) {
-            MascotasScreen(
-                onRegisterMascotaClick = { navController.navigate("register_mascota") }
-            )
+            MascotasScreen()
         }
         composable(route = "register_mascota") {
-            RegistrarMascotaScreen { mascota: Mascotas ->  // Especifica el tipo aquí
-                // Aquí podrías manejar el registro de la mascota, enviarla al servidor o almacenarla localmente
-                navController.popBackStack() // Vuelve a la pantalla anterior después de registrar
+            RegistrarMascotaScreen { mascota: Mascotas ->
+                navController.popBackStack()
             }
         }
     }
