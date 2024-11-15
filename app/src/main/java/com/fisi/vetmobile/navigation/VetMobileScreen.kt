@@ -1,7 +1,9 @@
 package com.fisi.vetmobile.navigation
 
 enum class VetMobileScreen {
-        Home,
+        Welcome,
         Login,
-        Mascotas
+        RegistroUsuario,
+        Mascotas,
+        RegistroMascota
 }

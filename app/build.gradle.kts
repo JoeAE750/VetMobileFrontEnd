@@ -69,8 +69,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation(libs.androidx.storage)
     implementation(libs.androidx.annotation)
-    implementation ("com.auth0.android:jwtdecode:2.0.0") // Biblioteca para decodificar el access_token
+    implementation ("com.auth0.android:jwtdecode:2.0.0")
+    implementation(libs.androidx.espresso.core) // Biblioteca para decodificar el access_token
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

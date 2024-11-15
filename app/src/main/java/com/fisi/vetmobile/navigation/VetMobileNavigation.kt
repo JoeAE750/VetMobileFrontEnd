@@ -36,6 +36,7 @@ fun VetMobileApp(
 */
 
 package com.fisi.vetmobile.navigation
+import androidx.compose.material3.Scaffold
 import com.fisi.vetmobile.data.model.Mascotas
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,14 +52,17 @@ import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 
 @Composable
 fun VetMobileApp(
-    navController: NavHostController = rememberNavController(),
-    loginViewModel: LoginViewModel = viewModel()
+    navController: NavHostController = rememberNavController()
 ) {
+    Scaffold(){
+
+    }
     NavHost(
         navController = navController,
-        startDestination = VetMobileScreen.Login.name
+        startDestination = VetMobileScreen.Welcome.name
     ) {
         composable(route = VetMobileScreen.Login.name) {
+            val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
             LoginScreen(loginViewModel) {
                 navController.navigate(VetMobileScreen.Mascotas.name)
             }

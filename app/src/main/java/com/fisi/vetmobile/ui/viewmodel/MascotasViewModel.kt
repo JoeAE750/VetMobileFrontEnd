@@ -1,9 +1,7 @@
-/*
 package com.fisi.vetmobile.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fisi.vetmobile.data.model.Mascotas
 import com.fisi.vetmobile.ui.uistate.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,5 +57,4 @@ class MascotasViewModel : ViewModel() {
             }
         }
     }
-}*
-*/
+}
