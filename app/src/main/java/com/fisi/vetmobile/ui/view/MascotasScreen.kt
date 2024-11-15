@@ -212,6 +212,8 @@ fun MascotasList(mascotas: List<Mascotas>) {
         }
     }
 */
+
+
 package com.fisi.vetmobile.ui.view
 
 import androidx.compose.foundation.layout.*
