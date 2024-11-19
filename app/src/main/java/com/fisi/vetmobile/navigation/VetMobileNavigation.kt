@@ -1,80 +1,74 @@
-/*
 package com.fisi.vetmobile.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.fisi.vetmobile.ui.view.HomeScreen
-import com.fisi.vetmobile.ui.view.LoginScreen
-import com.fisi.vetmobile.ui.view.MascotasScreen
-import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
-
-@Composable
-fun VetMobileApp(
-    navController: NavHostController = rememberNavController(),
-    loginViewModel: LoginViewModel = viewModel()
-) {
-
-    NavHost(
-        navController = navController,
-        startDestination = VetMobileScreen.Home.name,
-    ) {
-        composable(route = VetMobileScreen.Home.name) {
-            HomeScreen(onLoginClick = { navController.navigate(VetMobileScreen.Login.name) })
-        }
-        composable(route = VetMobileScreen.Login.name) {
-            LoginScreen(loginViewModel)
-        }
-        composable(route = VetMobileScreen.Mascotas.name) {
-            MascotasScreen()
-        }
-    }
-}
-*/
-
-package com.fisi.vetmobile.navigation
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import com.fisi.vetmobile.data.model.Mascotas
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.fisi.vetmobile.R
 import com.fisi.vetmobile.ui.view.LoginScreen
 import com.fisi.vetmobile.ui.view.MascotasScreen
 import com.fisi.vetmobile.ui.view.RegistrarMascotaScreen
-import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
+import com.fisi.vetmobile.ui.view.RegistroUsuarioScreen
+import com.fisi.vetmobile.ui.view.WelcomeScreen
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VetMobileApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
-    Scaffold(){
+
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentScreen = VetMobileScreen.valueOf(
+        backStackEntry?.destination?.route ?: VetMobileScreen.Welcome.name
+    )
+
+    Scaffold(
+        topBar = {},
+        bottomBar = {}
+    ){ innerPadding ->
+
+        NavHost(
+            navController = navController,
+            startDestination = VetMobileScreen.Welcome.name,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable( route = VetMobileScreen.Welcome.name){
+                WelcomeScreen(onLoginClick = {
+                    navController.navigate(VetMobileScreen.Login.name)
+                }, onRegisterClick = {
+                    navController.navigate(VetMobileScreen.RegistroUsuario.name)
+                })
+            }
+            composable( route = VetMobileScreen.Login.name){
+                LoginScreen(onLoginSuccess = {navController.navigate(VetMobileScreen.Mascotas.name)}, navigateUp = {navController.navigateUp()})
+            }
+            composable( route = VetMobileScreen.RegistroUsuario.name){
+                RegistroUsuarioScreen(navigateUp = {navController.navigateUp()}, onRegisterSuccess = {navController.navigate(VetMobileScreen.Mascotas.name)})
+            }
+            composable( route = VetMobileScreen.Mascotas.name){
+                MascotasScreen()
+            }
+            composable( route = VetMobileScreen.RegistroMascota.name){
+                RegistrarMascotaScreen()
+            }
+        }
 
     }
-    NavHost(
-        navController = navController,
-        startDestination = VetMobileScreen.Welcome.name
-    ) {
-        composable(route = VetMobileScreen.Login.name) {
-            val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
-            LoginScreen(loginViewModel) {
-                navController.navigate(VetMobileScreen.Mascotas.name)
-            }
-        }
-        composable(route = VetMobileScreen.Mascotas.name) {
-            MascotasScreen()
-        }
-        composable(route = "register_mascota") {
-            RegistrarMascotaScreen { mascota: Mascotas ->
-                navController.popBackStack()
-            }
-        }
-    }
+
 }
 

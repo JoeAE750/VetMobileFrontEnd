@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fisi.vetmobile.VetMobileApplication
+import com.fisi.vetmobile.data.model.Usuarios
 import com.fisi.vetmobile.data.repository.UsuariosRepository
 import com.fisi.vetmobile.network.LoginRequest
 import com.fisi.vetmobile.ui.components.ConexionUIState
@@ -51,6 +52,25 @@ class LoginViewModel(private val usuariosRepository: UsuariosRepository) : ViewM
             }
         }
     }
+
+    fun registrarUsuario(usuario: Usuarios){
+        viewModelScope.launch {
+            try{
+                val result = usuariosRepository.registrarUsuario(usuario)
+                if(result.code() == 201){
+                    _uiState.update { currentState ->
+                        currentState.copy(isRegisterSuccesfull = true)
+                    }
+                }
+            }catch(e: HttpException){
+                _uiState.update { currentState ->
+                    currentState.copy(isRegisterSuccesfull = false)
+                }
+            }
+        }
+
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

@@ -23,6 +23,4 @@ data class LoginResponse(
     val accessToken: String,
     val message: String,
     val status: Int,
-    @SerialName("id_usuario")
-    val idUsuario: String // Agrega este campo
 )

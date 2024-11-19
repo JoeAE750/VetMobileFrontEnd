@@ -10,11 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fisi.vetmobile.data.model.Mascotas // Importa la clase Mascotas
+import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
+import com.fisi.vetmobile.ui.viewmodel.MascotasViewModel
 
 @Composable
 fun RegistrarMascotaScreen(
-    onMascotaRegistered: (Mascotas) -> Unit // Define el tipo de Mascotas correctamente
+    mascotasViewModel: MascotasViewModel = viewModel()
 ) {
     var nombre by remember { mutableStateOf("") }
     var especie by remember { mutableStateOf("") }
@@ -83,7 +86,7 @@ fun RegistrarMascotaScreen(
                 peso = peso,
                 genero = genero
             )
-            onMascotaRegistered(nuevaMascota)
+            mascotasViewModel.registrarMascota(nuevaMascota)
         }) {
             Text("Registrar Mascota")
         }
@@ -93,5 +96,5 @@ fun RegistrarMascotaScreen(
 @Preview
 @Composable
 fun RegistrarMascotaScreenPreview() {
-    RegistrarMascotaScreen(onMascotaRegistered = {})
+    RegistrarMascotaScreen()
 }

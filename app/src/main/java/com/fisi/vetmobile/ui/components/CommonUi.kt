@@ -3,12 +3,15 @@ package com.fisi.vetmobile.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Menu
@@ -18,7 +21,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -29,7 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fisi.vetmobile.R
@@ -38,34 +46,22 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Dog
 import compose.icons.fontawesomeicons.solid.ShoppingCart
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun VetMobileTopBar(
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit = {},
-    title: String
-) {
-    TopAppBar(colors = topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        titleContentColor = MaterialTheme.colorScheme.primary,
-    ), navigationIcon = {
-        if (canNavigateBack) {
-            IconButton(onClick = navigateUp) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Retroceder"
-                )
-            }
-        }
-    }, title = {
-        Text(
-            title,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.offset(x = 20.dp)
+fun Boton_Atras(modifier: Modifier,
+                navigateUp: () -> Unit
+){
+    IconButton(
+        onClick =  navigateUp,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowLeft, // Replace with your back icon resource
+            contentDescription = "Back"
         )
-    })
+    }
 }
+
 
 @Composable
 fun VetMobileBottomBar() {
@@ -90,6 +86,33 @@ fun VetMobileBottomBar() {
                 onClick = { selectedItem = index }
             )
         }
+    }
+}
+
+@Composable
+fun TextFieldFormulario(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isPassword: Boolean = false
+) {
+    Column(modifier = Modifier.padding(vertical = 4.dp, horizontal = 20.dp)) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(text = label, style = MaterialTheme.typography.labelSmall) },
+            textStyle = TextStyle(
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            ),
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+            colors = TextFieldDefaults.colors(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            shape = MaterialTheme.shapes.small,
+            singleLine = true
+        )
     }
 }
 

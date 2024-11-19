@@ -1,5 +1,4 @@
 package com.fisi.vetmobile.data.model
-import com.fisi.vetmobile.data.model.Mascotas
 
 data class Mascotas(
     val idmascota: String,

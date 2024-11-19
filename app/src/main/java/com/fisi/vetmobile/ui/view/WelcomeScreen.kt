@@ -1,19 +1,14 @@
 package com.fisi.vetmobile.ui.view
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
@@ -31,12 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fisi.vetmobile.R
-import com.fisi.vetmobile.ui.components.VetMobileTopBar
 import com.fisi.vetmobile.ui.theme.VetMobileTheme
 import com.fisi.vetmobile.ui.theme.provider
 
 @Composable
-fun HomeScreen(onLoginClick: () -> Unit) {
+fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     //var esEspecialista = false
         Column(
             modifier = Modifier
@@ -88,7 +81,7 @@ fun HomeScreen(onLoginClick: () -> Unit) {
             )
 
             ElevatedButton(
-                onClick = {},
+                onClick = onRegisterClick,
                 enabled = true
             ) {
                 Row(
@@ -117,6 +110,6 @@ fun HomeScreen(onLoginClick: () -> Unit) {
 @Composable
 fun PreviewLayout() {
     VetMobileTheme(darkTheme = true) {
-        HomeScreen(onLoginClick = {})
+        WelcomeScreen(onLoginClick = {}, onRegisterClick = {})
     }
 }

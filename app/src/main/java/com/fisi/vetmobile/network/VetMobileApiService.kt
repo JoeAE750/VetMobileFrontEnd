@@ -1,6 +1,8 @@
 package com.fisi.vetmobile.network
 
+import com.fisi.vetmobile.data.model.Mascotas
 import com.fisi.vetmobile.data.model.Usuarios
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -15,30 +17,10 @@ interface VetMobileApiService {
     suspend fun verificarLogin(@Body loginRequest: LoginRequest): LoginResponse
 
     @POST("usuarios")
-    suspend fun registrarUsuario(@Body usuarios: Usuarios): Usuarios
-
-    @PUT("usuarios/{username}")
-    suspend fun actualizarUsuario(@Path("username") username: String, @Body usuarios: Usuarios): UsuarioResponse
-
-    @DELETE("usuarios/{username}")
-    suspend fun eliminarUsuario(@Path("username") username: String): Response<Unit>
+    suspend fun registrarUsuario(@Body usuarios: Usuarios): Response<Usuarios>
 
     @POST("mascotas")
-    suspend fun createMascota(@Body mascotaRequest: MascotasRequest): MascotasResponse
+    suspend fun registrarMascota(@Body mascotaRequest: Mascotas)
 
-    @GET("mascotas/usuario")
-    suspend fun getMascotasByUser(@Query("id_usuario") idUsuario: String): List<MascotasResponse>
-
-    @GET("mascota")
-    suspend fun getMascotaByUserAndName(@Query("id_usuario") idUsuario: String, @Query("nombre") nombre: String): MascotasResponse
-
-    @PUT("mascotas/{id_mascota}")
-    suspend fun updateMascota(
-        @Path("id_mascota") idMascota: Int,
-        @Body mascotaRequest: MascotasRequest
-    ): MascotasResponse
-
-    @DELETE("mascotas/{id_mascota}")
-    suspend fun deleteMascota(@Path("id_mascota") idMascota: Int)
 
 }

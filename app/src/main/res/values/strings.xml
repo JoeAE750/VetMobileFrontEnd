@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">VetMobile</string>
+    <string name="login">Login</string>
+    <string name="registrousuario">RegistroUsuario</string>
+    <string name="mascotas">Mascotas</string>
+    <string name="registromascota">RegistroMascota</string>
+    <string name="back_button">Back Button\n</string>
 </resources>

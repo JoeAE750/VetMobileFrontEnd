@@ -1,5 +1,7 @@
 package com.fisi.vetmobile.data
 
+import com.fisi.vetmobile.data.repository.MascotasRepository
+import com.fisi.vetmobile.data.repository.NetworkMascotasRepository
 import com.fisi.vetmobile.data.repository.NetworkUsuariosRepository
 import com.fisi.vetmobile.data.repository.UsuariosRepository
 import com.fisi.vetmobile.network.VetMobileApiService
@@ -8,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 interface AppContainer {
     val usuariosRepository: UsuariosRepository
+    val mascotasRepository: MascotasRepository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -24,6 +27,10 @@ class DefaultAppContainer : AppContainer {
 
     override val usuariosRepository: UsuariosRepository by lazy{
         NetworkUsuariosRepository(retrofitService)
+    }
+
+    override val mascotasRepository: MascotasRepository by lazy{
+        NetworkMascotasRepository(retrofitService)
     }
 
 }
