@@ -30,7 +30,6 @@ import com.fisi.vetmobile.ui.theme.provider
 
 @Composable
 fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
-    //var esEspecialista = false
         Column(
             modifier = Modifier
             .padding(8.dp)

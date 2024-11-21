@@ -18,19 +18,24 @@ import retrofit2.HttpException
 
 class MascotasViewModel(private val mascotasRepository: MascotasRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    init {
-        loadMascotas()
-    }
+    private val _mascotas = MutableStateFlow<List<Mascotas>>(emptyList())
+    val mascotas: StateFlow<List<Mascotas>> get() = _mascotas
 
-    private fun loadMascotas() {
+
+    fun loadMascotas(idusuario: String) {
+        if (_mascotas.value.isNotEmpty()) return
+
         viewModelScope.launch {
-            try{
-
-            }catch (e: HttpException){
-
+            try {
+                val result = mascotasRepository.obtenerMascotas(idusuario)
+                if (result.isSuccessful) {
+                    _mascotas.value = result.body()!!
+                } else {
+                    // Handle API error
+                }
+            } catch (e: HttpException) {
+                // Handle exception
             }
         }
     }

@@ -71,7 +71,8 @@ dependencies {
     implementation(libs.androidx.storage)
     implementation(libs.androidx.annotation)
     implementation ("com.auth0.android:jwtdecode:2.0.0")
-    implementation(libs.androidx.espresso.core) // Biblioteca para decodificar el access_token
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.runtime.livedata) // Biblioteca para decodificar el access_token
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

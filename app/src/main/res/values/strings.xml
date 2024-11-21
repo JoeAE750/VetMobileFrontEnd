@@ -5,4 +5,7 @@
     <string name="mascotas">Mascotas</string>
     <string name="registromascota">RegistroMascota</string>
     <string name="back_button">Back Button\n</string>
+    <string name="options">opciones</string>
+    <string name="productos">productos</string>
+    <string name="citas">citas</string>
 </resources>

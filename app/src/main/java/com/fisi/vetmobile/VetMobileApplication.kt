@@ -16,7 +16,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 
 class VetMobileApplication : Application() {
     lateinit var container: AppContainer
-    private lateinit var usuarioSesionRepository: UsuariosSesionRepository
+    lateinit var usuarioSesionRepository: UsuariosSesionRepository
     override fun onCreate() {
         super.onCreate()
         usuarioSesionRepository = UsuariosSesionRepository(dataStore)
