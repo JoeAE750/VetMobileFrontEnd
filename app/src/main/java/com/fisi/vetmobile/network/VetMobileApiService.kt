@@ -25,5 +25,8 @@ interface VetMobileApiService {
     @GET("mascotas/usuario")
     suspend fun obtenerMascotas(@Query("id_usuario") idusuario: String): Response<List<Mascotas>>
 
+    @POST("mascotas")
+    suspend fun registrarMascota(@Body mascotaRequest: MascotasRequest): Response<Void>
+
 
 }

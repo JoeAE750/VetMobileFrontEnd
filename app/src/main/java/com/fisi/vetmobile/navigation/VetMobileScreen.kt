@@ -19,5 +19,7 @@ enum class VetMobileScreen(@StringRes val vista: Int,val icon: ImageVector? = nu
         RegistroMascota(vista = R.string.registromascota),
         Opciones(vista = R.string.options, icon = Icons.Filled.Menu),
         Productos(vista = R.string.productos, icon =  FontAwesomeIcons.Solid.ShoppingCart),
-        Citas(vista = R.string.citas, icon = Icons.Filled.DateRange)
+        Citas(vista = R.string.citas, icon = Icons.Filled.DateRange),
+        AgregarMascota(vista = R.string.agregar_mascota) // Nueva pantalla,
+
 }
