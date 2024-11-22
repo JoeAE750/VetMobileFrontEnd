@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -55,9 +54,7 @@ fun Boton_Atras(
 
 @Composable
 fun VetMobileBottomBar(
-    navController: NavController,
-    scope: CoroutineScope,
-    drawerState: DrawerState
+    navController: NavController, scope: CoroutineScope, drawerState: DrawerState
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     val items = listOf(
@@ -97,7 +94,11 @@ fun VetMobileBottomBar(
 
 @Composable
 fun TextFieldFormulario(
-    value: String, onValueChange: (String) -> Unit, label: String, isPassword: Boolean = false
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isPassword: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = Modifier.padding(vertical = 4.dp, horizontal = 20.dp)) {
         OutlinedTextField(
@@ -130,9 +131,7 @@ fun SelectorTextField(
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = modifier
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -148,19 +147,17 @@ fun SelectorTextField(
             colors = TextFieldDefaults.colors(),
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth().padding(horizontal = 28.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp),
             shape = MaterialTheme.shapes.small,
         )
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option: String ->
-                DropdownMenuItem(
-                    text = { Text(text = option) },
-                    onClick = {
-                        expanded = false
-                        onValueChangedEvent(option)
-                    }
-                )
+                DropdownMenuItem(text = { Text(text = option) }, onClick = {
+                    expanded = false
+                    onValueChangedEvent(option)
+                })
             }
         }
     }

@@ -86,7 +86,7 @@ fun VetMobileApp(
         }, gesturesEnabled = false
     ) {
         Scaffold(topBar = {
-            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login, VetMobileScreen.RegistroMascota, VetMobileScreen.RegistroUsuario)) {
+            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login, VetMobileScreen.RegistroMascota, VetMobileScreen.RegistroUsuario, VetMobileScreen.Productos)) {
                 TopAppBar(title = { Text(currentScreen.name) },
                     navigationIcon = { /* Add Navigation Icon if needed */ })
             }

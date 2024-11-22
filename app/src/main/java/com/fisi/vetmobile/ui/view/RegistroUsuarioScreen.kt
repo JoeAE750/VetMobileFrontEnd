@@ -24,12 +24,13 @@ import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 fun RegistroUsuarioScreen(
     navigateUp: () -> Unit,
     loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory),
-    onRegisterSuccess: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
 
     val loginUiState by loginViewModel.uiState.collectAsState()
 
-    if(loginUiState.isRegisterSuccesfull){
+
+    if (loginUiState.isRegisterSuccesfull) {
         onRegisterSuccess()
     }
 
@@ -40,61 +41,70 @@ fun RegistroUsuarioScreen(
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background), // Dark background
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
-        Boton_Atras(modifier = Modifier.padding(16.dp).align(Alignment.Start), navigateUp = navigateUp)
+        Boton_Atras(modifier = Modifier
+            .padding(16.dp)
+            .align(Alignment.Start), navigateUp = navigateUp)
+
 
         Icon(
-            imageVector = Icons.Filled.AccountBox, // Replace with your registration icon resource
+            imageVector = Icons.Filled.AccountBox,
             contentDescription = "Registro Icono",
             modifier = Modifier
                 .size(80.dp)
-                .padding(top = 10.dp),
+                .padding(bottom = 16.dp),
             tint = MaterialTheme.colorScheme.primary
         )
 
-        // Title
+
         Text(
             text = "REGISTRO",
             style = TextStyle(
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Default // Replace with a custom font if needed
+                fontFamily = FontFamily.Default,
+                color = MaterialTheme.colorScheme.primary
             ),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
 
-        // Username Text Field
-        TextFieldFormulario(value = username, onValueChange = { username = it }, label = "Nombre de Usuario")
-        TextFieldFormulario(value = password, onValueChange = { password = it }, label = "Contraseña", isPassword = true)
-        TextFieldFormulario(value = firstName, onValueChange = { firstName = it }, label = "Nombre")
-        TextFieldFormulario(value = lastName, onValueChange = { lastName = it }, label = "Apellido")
-        TextFieldFormulario(value = email, onValueChange = { email = it }, label = "Direccion de Correo Electronico")
-        TextFieldFormulario(value = phone, onValueChange = { phone = it }, label = "Celular")
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextFieldFormulario(value = username, onValueChange = { username = it }, label = "Nombre de Usuario")
+            TextFieldFormulario(value = password, onValueChange = { password = it }, label = "Contraseña", isPassword = true)
+            TextFieldFormulario(value = firstName, onValueChange = { firstName = it }, label = "Nombre")
+            TextFieldFormulario(value = lastName, onValueChange = { lastName = it }, label = "Apellido")
+            TextFieldFormulario(value = email, onValueChange = { email = it }, label = "Dirección de Correo Electrónico")
+            TextFieldFormulario(value = phone, onValueChange = { phone = it }, label = "Celular")
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+        }
 
-        val newUsuario = Usuarios(username = username, password_hash = password, nombre = firstName, apellido = lastName, email = email, celular =  phone)
 
+        val newUsuario = Usuarios(username = username, password_hash = password, nombre = firstName, apellido = lastName, email = email, celular = phone)
         Button(
-            onClick = { loginViewModel.registrarUsuario(newUsuario)},
+            onClick = { loginViewModel.registrarUsuario(newUsuario) },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
             modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(0.6f)
+                .padding(horizontal = 32.dp)
+                .fillMaxWidth()
+                .height(56.dp)
         ) {
-            Text(text = "Registrar", color = Color.White)
+            Text(text = "Registrar", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
     }
 }
+
 
 /*
 @Preview(apiLevel = 34)

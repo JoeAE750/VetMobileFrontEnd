@@ -1,10 +1,16 @@
 package com.fisi.vetmobile.ui.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,64 +39,94 @@ fun LoginScreen(
 ) {
     val loginUiState by loginViewModel.uiState.collectAsState()
 
-    Scaffold(topBar = {
-    }, bottomBar = {}) { innerPadding ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp)
+    ) {
+
+        Boton_Atras(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = 16.dp),
+            navigateUp = navigateUp
+        )
+
         Column(
-            modifier = Modifier.padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Boton_Atras(modifier = Modifier.padding(16.dp).align(Alignment.Start), navigateUp = navigateUp)
 
+            val imagePainter = painterResource(id = R.drawable.vet_launcher_foreground)
+            Image(
+                painter = imagePainter,
+                contentDescription = "Icono VetMobile",
+                modifier = Modifier
+                    .size(200.dp)
+            )
 
-                    if (loginUiState.isLoginSuccesfull) {
-                        onLoginSuccess()
-                    } else {
-                        LoginForm(loginViewModel)
-                    }
-                }
+            if (loginUiState.isLoginSuccesfull) {
+                onLoginSuccess()
+            } else {
+                LoginForm(loginViewModel)
             }
         }
-
-@Composable
-fun LoginForm(loginViewModel: LoginViewModel) {
-
-    val username by loginViewModel.username.observeAsState("")
-    val password by loginViewModel.contrasena.observeAsState("")
-
-    val imagePainter = painterResource(id = R.drawable.vet_launcher_foreground)
-
-    Image(
-        painter = imagePainter,
-        contentDescription = "Icono VetMobile",
-        modifier = Modifier.size(100.dp)
-    )
-
-    TextFieldFormulario(
-        value = username,
-        onValueChange = { loginViewModel.updateUsername(it) },
-        label = "Nombre de Usuario"
-    )
-    TextFieldFormulario(
-        value = password,
-        onValueChange = { loginViewModel.updateContrasena(it) },
-        label = "Contraseña",
-        isPassword = true
-    )
-
-
-    Button(onClick = {
-        loginViewModel.validarLogin(
-            username = username, contrasena = password
-        )
-    }) {
-        Text(text = "Iniciar Sesión", fontSize = 11.sp, fontWeight = FontWeight.Bold)
     }
 }
 
-/*
+@Composable
+fun LoginForm(loginViewModel: LoginViewModel) {
+    val username by loginViewModel.username.observeAsState("")
+    val password by loginViewModel.contrasena.observeAsState("")
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        TextFieldFormulario(
+            value = username,
+            onValueChange = { loginViewModel.updateUsername(it) },
+            label = "Nombre de Usuario",
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        TextFieldFormulario(
+            value = password,
+            onValueChange = { loginViewModel.updateContrasena(it) },
+            label = "Contraseña",
+            isPassword = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        Button(
+            onClick = {
+                loginViewModel.validarLogin(username = username, contrasena = password)
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .padding(top = 16.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "Iniciar Sesión",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
+}
+
+
+
+
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onLoginSuccess = {})
+    LoginScreen(onLoginSuccess = {}, navigateUp = {})
 }
-*/
