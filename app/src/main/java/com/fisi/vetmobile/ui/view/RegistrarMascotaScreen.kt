@@ -1,5 +1,7 @@
 package com.fisi.vetmobile.ui.view
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -15,6 +17,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color // Agregar importación para Color
+import androidx.compose.ui.res.painterResource // Para cargar imágenes locales
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fisi.vetmobile.data.model.Mascotas // Importa la clase Mascotas
 import com.fisi.vetmobile.ui.components.Boton_Atras
 import com.fisi.vetmobile.ui.components.TextFieldFormulario
-import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 import com.fisi.vetmobile.ui.viewmodel.MascotasViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
@@ -44,97 +47,113 @@ fun RegistrarMascotaScreen(
     var peso by remember { mutableStateOf("") }
     var genero by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+    // Define el color verde claro
+    val backgroundColor = Color(0xFFB8E2B4) // Verde claro en hexadecimal
 
-        Boton_Atras(modifier = Modifier.padding(16.dp).align(Alignment.Start), navigateUp = navigateUp)
+    // Cargar imagen de perrito desde recursos (res/drawable/perrito.jpg)
+    val backgroundImage = painterResource(id = com.fisi.vetmobile.R.drawable.img) // Asegúrate de tener la imagen en res/drawable
 
-        Icon(
-            imageVector = FontAwesomeIcons.Solid.Paw, // Replace with your registration icon resource
-            contentDescription = "Registro Mascota Icono",
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Imagen de fondo de perrito que ocupa toda la pantalla
+        Image(
+            painter = backgroundImage,
+            contentDescription = "Imagen de perrito",
             modifier = Modifier
-                .size(80.dp)
-                .padding(top = 10.dp),
-            tint = MaterialTheme.colorScheme.primary
+                .fillMaxSize() // Asegura que la imagen cubra toda la pantalla
+                .align(Alignment.Center)
         )
 
-
-        Text(
-            text = "REGISTRO DE MASCOTA",
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Default // Replace with a custom font if needed
-            ),
-            modifier = Modifier.padding(8.dp)
-        )
-
-        TextFieldFormulario(value = nombre, onValueChange = { nombre = it }, label = "Nombre")
-
-        val options = listOf("Perro", "Gato")
-        var expanded by remember { mutableStateOf(false) }
-        var selectedOptionText by remember { mutableStateOf(options[0]) }
-
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
+        // Contenido principal (formulario, icono, etc.)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            TextField(
-                readOnly = true,
-                value = selectedOptionText,
-                onValueChange = { },
-                label = { Text("Label") },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(
-                        expanded = expanded
-                    )
-                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors()
+            Boton_Atras(modifier = Modifier.padding(16.dp).align(Alignment.Start), navigateUp = navigateUp)
+
+            Icon(
+                imageVector = FontAwesomeIcons.Solid.Paw, // Replace with your registration icon resource
+                contentDescription = "Registro Mascota Icono",
+                modifier = Modifier
+                    .size(80.dp)
+                    .padding(top = 10.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
-            ExposedDropdownMenu(
+
+            Text(
+                text = "REGISTRO DE MASCOTA",
+                style = TextStyle(
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Default // Replace with a custom font if needed
+                ),
+                modifier = Modifier.padding(8.dp)
+            )
+
+            TextFieldFormulario(value = nombre, onValueChange = { nombre = it }, label = "Nombre")
+
+            val options = listOf("Perro", "Gato")
+            var expanded by remember { mutableStateOf(false) }
+            var selectedOptionText by remember { mutableStateOf(options[0]) }
+
+            ExposedDropdownMenuBox(
                 expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
+                onExpandedChange = {
+                    expanded = !expanded
                 }
             ) {
-                options.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        text = {},
-                        onClick = {
-                            selectedOptionText = selectionOption
-                            expanded = false
-                        }
-                    )
+                TextField(
+                    readOnly = true,
+                    value = selectedOptionText,
+                    onValueChange = { },
+                    label = { Text("Label") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expanded
+                        )
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = {
+                        expanded = false
+                    }
+                ) {
+                    options.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = {},
+                            onClick = {
+                                selectedOptionText = selectionOption
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
-        }
 
-        TextFieldFormulario(value = raza, onValueChange = { raza = it }, label = "Raza")
-        TextFieldFormulario(value = edad, onValueChange = { edad = it }, label = "Edad")
-        TextFieldFormulario(value = peso, onValueChange = { peso = it }, label = "Peso")
-        TextFieldFormulario(value = genero, onValueChange = { genero = it }, label = "Genero")
+            TextFieldFormulario(value = raza, onValueChange = { raza = it }, label = "Raza")
+            TextFieldFormulario(value = edad, onValueChange = { edad = it }, label = "Edad")
+            TextFieldFormulario(value = peso, onValueChange = { peso = it }, label = "Peso")
+            TextFieldFormulario(value = genero, onValueChange = { genero = it }, label = "Genero")
 
 
-        val nuevaMascota = Mascotas(
-            id_usuario = idusuario.toInt(),
-            nombre = nombre,
-            especie = if(selectedOptionText == "Perro") "1" else "2",
-            raza = raza,
-            edad = edad,
-            peso = peso,
-            genero = genero
-        )
+            val nuevaMascota = Mascotas(
+                id_usuario = idusuario.toInt(),
+                nombre = nombre,
+                especie = if(selectedOptionText == "Perro") "1" else "2",
+                raza = raza,
+                edad = edad,
+                peso = peso,
+                genero = genero
+            )
 
-        Button(onClick = {
-            mascotasViewModel.registrarMascota(nuevaMascota)
-        }) {
-            Text("Registrar Mascota")
+            Button(onClick = {
+                mascotasViewModel.registrarMascota(nuevaMascota)
+            }) {
+                Text("Registrar Mascota")
+            }
         }
     }
 }
