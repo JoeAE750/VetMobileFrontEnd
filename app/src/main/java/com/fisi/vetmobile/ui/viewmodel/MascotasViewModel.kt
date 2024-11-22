@@ -21,8 +21,6 @@ class MascotasViewModel(private val mascotasRepository: MascotasRepository) : Vi
 
 
     fun loadMascotas(idusuario: String) {
-        if (_mascotas.value.isNotEmpty()) return
-
         viewModelScope.launch {
             try {
                 val result = mascotasRepository.obtenerMascotas(idusuario)
@@ -42,7 +40,7 @@ class MascotasViewModel(private val mascotasRepository: MascotasRepository) : Vi
             try{
                 val result = mascotasRepository.registrarMascota(mascota)
                 if(result.code() == 201){
-                    _mascotas.value += mascota
+                    loadMascotas(mascota.id_usuario.toString())
                 }
             }catch (e: HttpException){
 

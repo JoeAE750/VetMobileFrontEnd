@@ -1,8 +1,12 @@
 package com.fisi.vetmobile.ui.view
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -26,30 +30,14 @@ import com.fisi.vetmobile.ui.theme.provider
 
 @Composable
 fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
-    // Cargar la imagen de fondo
-    val backgroundImage = painterResource(id = R.drawable.img_1) // Asegúrate de tener la imagen en res/drawable
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Imagen de fondo ocupando la mitad inferior de la pantalla
-        Image(
-            painter = backgroundImage,
-            contentDescription = "Imagen de fondo",
-            modifier = Modifier
-                .fillMaxWidth() // Hace que la imagen ocupe todo el ancho
-                .fillMaxHeight(0.5f) // Hace que la imagen ocupe solo la mitad inferior de la pantalla
-                .align(Alignment.BottomCenter) // Coloca la imagen en la parte inferior
-        )
-
-        // Contenido principal sobre la imagen (en la parte superior)
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            .padding(8.dp)
+            .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente en la parte superior
         ) {
 
-            // Icono de la aplicación (Logo)
+
             val imagePainter = painterResource(id = R.drawable.vet_launcher_round)
             Image(
                 painter = imagePainter,
@@ -57,7 +45,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 modifier = Modifier.size(100.dp)
             )
 
-            // Texto "VET"
             Text(
                 text = "VET",
                 style = TextStyle(
@@ -76,7 +63,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 )
             )
 
-            // Texto "Mobile"
             Text(
                 text = "Mobile",
                 style = TextStyle(
@@ -93,7 +79,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 )
             )
 
-            // Botón de registro
             ElevatedButton(
                 onClick = onRegisterClick,
                 enabled = true
@@ -108,7 +93,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 }
             }
 
-            // Botón de login
             Button(
                 onClick = onLoginClick,
                 modifier = Modifier
@@ -120,7 +104,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
 
         }
     }
-}
 
 @Preview
 @Composable

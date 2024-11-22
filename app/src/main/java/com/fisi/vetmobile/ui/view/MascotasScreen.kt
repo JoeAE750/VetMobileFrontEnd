@@ -36,7 +36,7 @@ fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = Mas
 
     val mascotas by mascotaViewModel.mascotas.collectAsState()
 
-    LaunchedEffect(idusuario) {
+    LaunchedEffect(idusuario,) {
         mascotaViewModel.loadMascotas(idusuario)
     }
 
