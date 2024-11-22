@@ -29,6 +29,10 @@ fun RegistroUsuarioScreen(
 
     val loginUiState by loginViewModel.uiState.collectAsState()
 
+    if(loginUiState.isRegisterSuccesfull){
+        onRegisterSuccess()
+    }
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var firstName by remember { mutableStateOf("") }
@@ -36,16 +40,13 @@ fun RegistroUsuarioScreen(
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background), // Dark background
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        if(loginUiState.isRegisterSuccesfull){
-            onRegisterSuccess()
-        }
 
         Boton_Atras(modifier = Modifier.padding(16.dp).align(Alignment.Start), navigateUp = navigateUp)
 

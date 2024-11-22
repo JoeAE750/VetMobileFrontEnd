@@ -1,8 +1,8 @@
 package com.fisi.vetmobile.data.model
 
 data class Mascotas(
-    val idmascota: String?= null,
-    val idusuario: String,
+    val id_mascota: Int?= null,
+    val id_usuario: Int,
     val nombre: String,
     val especie: String,
     val raza: String,

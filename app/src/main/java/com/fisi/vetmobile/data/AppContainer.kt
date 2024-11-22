@@ -1,8 +1,6 @@
 package com.fisi.vetmobile.data
 
 import com.fisi.vetmobile.data.repository.MascotasRepository
-import com.fisi.vetmobile.data.repository.MascotasRegistroRepository // Importamos el nuevo repositorio
-import com.fisi.vetmobile.data.repository.NetworkMascotasRegistroRepository
 import com.fisi.vetmobile.data.repository.NetworkMascotasRepository
 import com.fisi.vetmobile.data.repository.NetworkUsuariosRepository
 import com.fisi.vetmobile.data.repository.UsuariosRepository
@@ -13,7 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 interface AppContainer {
     val usuariosRepository: UsuariosRepository
     val mascotasRepository: MascotasRepository
-    val mascotasRegistroRepository: MascotasRegistroRepository // Añadimos el repositorio de registro de mascotas
 }
 
 class DefaultAppContainer : AppContainer {
@@ -36,7 +33,4 @@ class DefaultAppContainer : AppContainer {
         NetworkMascotasRepository(retrofitService)
     }
 
-    override val mascotasRegistroRepository: MascotasRegistroRepository by lazy {
-        NetworkMascotasRegistroRepository(retrofitService) // Instanciamos el repositorio de registro de mascotas
-    }
 }

@@ -9,15 +9,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fisi.vetmobile.VetMobileApplication
 import com.fisi.vetmobile.data.model.Mascotas
 import com.fisi.vetmobile.data.repository.MascotasRepository
-import com.fisi.vetmobile.ui.uistate.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class MascotasViewModel(private val mascotasRepository: MascotasRepository) : ViewModel() {
-
 
     private val _mascotas = MutableStateFlow<List<Mascotas>>(emptyList())
     val mascotas: StateFlow<List<Mascotas>> get() = _mascotas
@@ -43,7 +40,10 @@ class MascotasViewModel(private val mascotasRepository: MascotasRepository) : Vi
     fun registrarMascota(mascota: Mascotas) {
         viewModelScope.launch {
             try{
-
+                val result = mascotasRepository.registrarMascota(mascota)
+                if(result.code() == 201){
+                    _mascotas.value += mascota
+                }
             }catch (e: HttpException){
 
             }

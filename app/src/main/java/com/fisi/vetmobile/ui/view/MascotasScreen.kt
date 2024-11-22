@@ -215,7 +215,6 @@ fun MascotasList(mascotas: List<Mascotas>) {
 
 
 package com.fisi.vetmobile.ui.view
-import androidx.navigation.NavController
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -249,17 +248,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fisi.vetmobile.data.model.Mascotas
-import com.fisi.vetmobile.navigation.VetMobileScreen
 import com.fisi.vetmobile.ui.viewmodel.MascotasViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Cat
 import compose.icons.fontawesomeicons.solid.Dog
 
-/*
 
 @Composable
-fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = MascotasViewModel.Factory), idusuario:String) {
+fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = MascotasViewModel.Factory), idusuario:String, onAddMascotaClick: () -> Unit) {
 
     val mascotas by mascotaViewModel.mascotas.collectAsState()
 
@@ -278,7 +275,7 @@ fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = Mas
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate(VetMobileScreen.AgregarMascota.name) },
+            onClick = onAddMascotaClick ,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
@@ -288,39 +285,6 @@ fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = Mas
     }
 
 }
-*/
-@Composable
-fun MascotasScreen(
-    navController: NavController,  // Agregar el NavController como parámetro
-    mascotaViewModel: MascotasViewModel = viewModel(factory = MascotasViewModel.Factory),
-    idusuario: String
-) {
-    val mascotas by mascotaViewModel.mascotas.collectAsState()
-
-    LaunchedEffect(idusuario) {
-        mascotaViewModel.loadMascotas(idusuario)
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column {
-            MascotasList(Modifier.padding(), mascotas)
-        }
-
-        FloatingActionButton(
-            onClick = { navController.navigate(VetMobileScreen.AgregarMascota.name) }, // Uso de navController
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Agregar Mascotas")
-        }
-    }
-}
-
 
 
 @Composable

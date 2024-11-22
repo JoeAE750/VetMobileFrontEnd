@@ -29,7 +29,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fisi.vetmobile.ui.components.VetMobileBottomBar
-import com.fisi.vetmobile.ui.view.AgregarMascotaScreen
 import com.fisi.vetmobile.ui.view.CitasScreen
 import com.fisi.vetmobile.ui.view.LoginScreen
 import com.fisi.vetmobile.ui.view.MascotasScreen
@@ -40,192 +39,6 @@ import com.fisi.vetmobile.ui.view.WelcomeScreen
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun VetMobileApp(
-    navController: NavHostController = rememberNavController(),
-) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
-
-    val currentScreen = VetMobileScreen.valueOf(
-        backStackEntry?.destination?.route ?: VetMobileScreen.Welcome.name
-    )
-
-    val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
-    val loginUiState by loginViewModel.uiState.collectAsState()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-
-    ModalNavigationDrawer(
-        drawerState = drawerState, drawerContent = {
-            ModalDrawerSheet {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text("Menu", fontSize = 24.sp, color = Color.Blue)
-                    HorizontalDivider(color = Color.Gray)
-                    NavigationDrawerItem(label = { Text("Perfil") },
-                        selected = false,
-                        onClick = { /* Handle Home action */ })
-                    NavigationDrawerItem(label = { Text("Cerrar Sesion") },
-                        selected = false,
-                        onClick = {
-                            scope.launch {
-                                if (drawerState.isClosed) {
-                                    drawerState.open()
-                                } else {
-                                    drawerState.close()
-                                }
-                            }
-                            loginViewModel.cerrarSesion()
-                        })
-                }
-            }
-        }, gesturesEnabled = false
-    ) {
-        Scaffold(topBar = {
-            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login)) {
-                TopAppBar(title = { Text(currentScreen.name) },
-                    navigationIcon = { /* Add Navigation Icon if needed */ })
-            }
-        }, bottomBar = {
-            if (currentScreen in listOf(
-                    VetMobileScreen.Mascotas,
-                    VetMobileScreen.Productos,
-                    VetMobileScreen.Citas
-                )
-            ) {
-                VetMobileBottomBar(
-                    navController = navController,
-                    scope = scope,
-                    drawerState = drawerState
-                )
-            }
-        }) { innerPadding ->
-
-            NavHost(
-                navController = navController,
-                startDestination = if (loginUiState.isLoginSuccesfull) VetMobileScreen.Mascotas.name else VetMobileScreen.Welcome.name,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(route = VetMobileScreen.Welcome.name) {
-                    WelcomeScreen(onLoginClick = {
-                        navController.navigate(VetMobileScreen.Login.name)
-                    }, onRegisterClick = {
-                        navController.navigate(VetMobileScreen.RegistroUsuario.name)
-                    })
-                }
-                composable(route = VetMobileScreen.Login.name) {
-                    LoginScreen(onLoginSuccess = { },
-                        navigateUp = { navController.navigateUp() })
-                }
-                composable(route = VetMobileScreen.RegistroUsuario.name) {
-                    RegistroUsuarioScreen(navigateUp = { navController.navigateUp() },
-                        onRegisterSuccess = { navController.navigate(VetMobileScreen.Mascotas.name) })
-                }
-                /*
-                composable(route = VetMobileScreen.Mascotas.name) {
-                    MascotasScreen(idusuario =loginUiState.idusuario)
-                }
-                */
-                composable(route = VetMobileScreen.Mascotas.name) {
-                    val navController = rememberNavController() // Crear el navController aquí
-                    MascotasScreen(
-                        navController = navController,  // Pasar el navController
-                        idusuario = loginUiState.idusuario // Pasar el idusuario
-                    )
-                }
-
-
-                composable(route = VetMobileScreen.RegistroMascota.name) {
-                    RegistrarMascotaScreen()
-                }
-                composable(route = VetMobileScreen.Productos.name) {
-                    ProductosScreen()
-                }
-                composable(route = VetMobileScreen.Citas.name) {
-                    CitasScreen()
-                }
-                composable(route = VetMobileScreen.AgregarMascota.name) {
-                    AgregarMascotaScreen()
-                }
-            }
-        }
-
-        Scaffold(topBar = {
-            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login)) {
-                TopAppBar(title = { Text(currentScreen.name) },
-                    navigationIcon = { /* Add Navigation Icon if needed */ })
-            }
-        }, bottomBar = {
-            if (currentScreen in listOf(
-                    VetMobileScreen.Mascotas,
-                    VetMobileScreen.Productos,
-                    VetMobileScreen.Citas
-                )
-            ) {
-                VetMobileBottomBar(
-                    navController = navController,
-                    scope = scope,
-                    drawerState = drawerState
-                )
-            }
-        }) { innerPadding ->
-
-            NavHost(
-                navController = navController,
-                startDestination = if (loginUiState.isLoginSuccesfull) VetMobileScreen.Mascotas.name else VetMobileScreen.Welcome.name,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(route = VetMobileScreen.Welcome.name) {
-                    WelcomeScreen(onLoginClick = {
-                        navController.navigate(VetMobileScreen.Login.name)
-                    }, onRegisterClick = {
-                        navController.navigate(VetMobileScreen.RegistroUsuario.name)
-                    })
-                }
-                composable(route = VetMobileScreen.Login.name) {
-                    LoginScreen(onLoginSuccess = { },
-                        navigateUp = { navController.navigateUp() })
-                }
-                composable(route = VetMobileScreen.RegistroUsuario.name) {
-                    RegistroUsuarioScreen(navigateUp = { navController.navigateUp() },
-                        onRegisterSuccess = { navController.navigate(VetMobileScreen.Mascotas.name) })
-                }
-                /*
-                composable(route = VetMobileScreen.Mascotas.name) {
-                    MascotasScreen(idusuario =loginUiState.idusuario)
-                }*/
-                composable(route = VetMobileScreen.Mascotas.name) {
-                    val navController = rememberNavController() // Crear el navController aquí
-                    MascotasScreen(
-                        navController = navController,  // Pasar el navController
-                        idusuario = loginUiState.idusuario // Pasar el idusuario
-                    )
-                }
-
-                composable(route = VetMobileScreen.RegistroMascota.name) {
-                    RegistrarMascotaScreen()
-                }
-                composable(route = VetMobileScreen.Productos.name) {
-                    ProductosScreen()
-                }
-                composable(route = VetMobileScreen.Citas.name) {
-                    CitasScreen()
-                }
-                composable(route = VetMobileScreen.AgregarMascota.name) {
-                    AgregarMascotaScreen()
-                }
-
-            }
-        }
-    }
-}
-*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VetMobileApp(
@@ -273,7 +86,7 @@ fun VetMobileApp(
         }, gesturesEnabled = false
     ) {
         Scaffold(topBar = {
-            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login)) {
+            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login, VetMobileScreen.RegistroMascota, VetMobileScreen.RegistroUsuario)) {
                 TopAppBar(title = { Text(currentScreen.name) },
                     navigationIcon = { /* Add Navigation Icon if needed */ })
             }
@@ -313,19 +126,16 @@ fun VetMobileApp(
                         onRegisterSuccess = { navController.navigate(VetMobileScreen.Mascotas.name) })
                 }
                 composable(route = VetMobileScreen.Mascotas.name) {
-                    MascotasScreen(idusuario = loginUiState.idusuario, navController = navController)
+                    MascotasScreen(idusuario = loginUiState.idusuario,  onAddMascotaClick = {navController.navigate(VetMobileScreen.RegistroMascota.name)})
                 }
                 composable(route = VetMobileScreen.RegistroMascota.name) {
-                    RegistrarMascotaScreen()
+                    RegistrarMascotaScreen(navigateUp = { navController.navigateUp() }, idusuario = loginUiState.idusuario)
                 }
                 composable(route = VetMobileScreen.Productos.name) {
                     ProductosScreen()
                 }
                 composable(route = VetMobileScreen.Citas.name) {
                     CitasScreen()
-                }
-                composable(route = VetMobileScreen.AgregarMascota.name) {
-                    AgregarMascotaScreen()  // Pantalla de agregar mascota
                 }
             }
         }
