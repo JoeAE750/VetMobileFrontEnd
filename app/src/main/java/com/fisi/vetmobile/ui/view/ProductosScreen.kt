@@ -71,7 +71,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun ProductosScreen(
+    onCarritoClick:() -> Unit,
     modifier: Modifier = Modifier
+
 ) {
     Scaffold { paddingValues ->
         Box(modifier = modifier.padding(paddingValues)) {
@@ -89,7 +91,7 @@ fun ProductosScreen(
                     contentDescription = "Carrito de Compras",
                     modifier = Modifier
                         .padding(top = 20.dp, start = 110.dp)
-                        .clickable {})
+                        .clickable {onCarritoClick})
             }
 
             Column(

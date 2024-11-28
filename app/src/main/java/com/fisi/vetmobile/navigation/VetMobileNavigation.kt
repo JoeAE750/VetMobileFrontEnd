@@ -23,12 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fisi.vetmobile.ui.components.VetMobileBottomBar
+import com.fisi.vetmobile.ui.view.CarritoScreen
 import com.fisi.vetmobile.ui.view.CitasScreen
 import com.fisi.vetmobile.ui.view.LoginScreen
 import com.fisi.vetmobile.ui.view.MascotasScreen
@@ -132,11 +134,15 @@ fun VetMobileApp(
                     RegistrarMascotaScreen(navigateUp = { navController.navigateUp() }, idusuario = loginUiState.idusuario)
                 }
                 composable(route = VetMobileScreen.Productos.name) {
-                    ProductosScreen()
+                    ProductosScreen( onCarritoClick = { navController.navigate(VetMobileScreen.Carrito.name)})
                 }
                 composable(route = VetMobileScreen.Citas.name) {
                     CitasScreen()
                 }
+                composable(route = VetMobileScreen.Carrito.name) {
+                    CarritoScreen()
+                }
+
             }
         }
     }
