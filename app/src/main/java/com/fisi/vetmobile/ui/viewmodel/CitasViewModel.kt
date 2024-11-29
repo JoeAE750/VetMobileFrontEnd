@@ -8,9 +8,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fisi.vetmobile.VetMobileApplication
 import com.fisi.vetmobile.data.model.Citas
+import com.fisi.vetmobile.data.model.Mascotas
 import com.fisi.vetmobile.data.model.Tipo_Servicios
 import com.fisi.vetmobile.data.model.Veterinarios
 import com.fisi.vetmobile.data.repository.CitasRepository
+import com.fisi.vetmobile.data.repository.MascotasRepository
 import com.fisi.vetmobile.ui.uistate.CitasUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +21,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CitasViewModel(
-    private val citasRepository: CitasRepository
+    private val citasRepository: CitasRepository,
+    private val mascotasRepository: MascotasRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CitasUiState())
     val uiState: StateFlow<CitasUiState> = _uiState.asStateFlow()
@@ -32,6 +35,13 @@ class CitasViewModel(
 
     private val _veterinarios = MutableStateFlow<List<Veterinarios>>(emptyList())
     val veterinarios: StateFlow<List<Veterinarios>> get() = _veterinarios
+
+    private val _mascotas = MutableStateFlow<List<Mascotas>>(emptyList())
+    val mascotas: StateFlow<List<Mascotas>> get() = _mascotas
+
+    fun limpiarUiState(){
+        _uiState.value = CitasUiState()
+    }
 
     fun loadServicios() {
         viewModelScope.launch {
@@ -60,6 +70,16 @@ class CitasViewModel(
         }
     }
 
+    fun loadMascotas(idusuario: String) {
+        viewModelScope.launch {
+            val result = mascotasRepository.obtenerMascotas(idusuario)
+            if (result.isSuccessful) {
+                _mascotas.value = result.body()!!
+            }
+        }
+    }
+
+
     fun crearCita(cita: Citas) {
         viewModelScope.launch {
             citasRepository.crearCita(cita)
@@ -69,6 +89,12 @@ class CitasViewModel(
     fun eliminarCita(id_cita: Int) {
         viewModelScope.launch {
             citasRepository.eliminarCita(id_cita)
+        }
+    }
+
+    fun updateIdUsuario(newIdUsuario: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(id_usuario = newIdUsuario.toString())
         }
     }
 
@@ -84,7 +110,7 @@ class CitasViewModel(
         }
     }
 
-    fun updateVeterinario(newVeterinario: String) {
+    fun updateVeterinario(newVeterinario: Int) {
         _uiState.update { currentState ->
             currentState.copy(id_veterinario = newVeterinario)
         }
@@ -102,17 +128,19 @@ class CitasViewModel(
         }
     }
 
-
-
-
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as VetMobileApplication)
                 val citasRepository = application.container.citasRepository
-                CitasViewModel(citasRepository = citasRepository)
+                val mascotasRepository = application.container.mascotasRepository
+                CitasViewModel(
+                    citasRepository = citasRepository,
+                    mascotasRepository = mascotasRepository
+                )
             }
         }
     }
 
 }
+

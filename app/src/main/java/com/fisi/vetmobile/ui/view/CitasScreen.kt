@@ -48,31 +48,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fisi.vetmobile.R
 import com.fisi.vetmobile.data.model.Citas
+import com.fisi.vetmobile.data.model.Mascotas
 import com.fisi.vetmobile.data.model.Tipo_Servicios
 import com.fisi.vetmobile.data.model.Veterinarios
 import com.fisi.vetmobile.ui.viewmodel.CitasViewModel
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.text.split
 
 @Composable
 fun CitasScreen(
-    citaViewModel: CitasViewModel = viewModel(factory = CitasViewModel.Factory, key = "citasViewModel"),
-    idusuario: Int,
-    onServicioClick: () -> Unit
+    citaViewModel: CitasViewModel, idusuario: Int, onServicioClick: () -> Unit
 ) {
     val citas by citaViewModel.citas.collectAsState()
     val servicios by citaViewModel.servicios.collectAsState()
     val veterinarios by citaViewModel.veterinarios.collectAsState()
+    val mascotas by citaViewModel.mascotas.collectAsState()
+
+    citaViewModel.updateIdUsuario(idusuario)
 
     LaunchedEffect(Unit) {
         citaViewModel.loadServicios()
         citaViewModel.loadVeterinarios()
         citaViewModel.loadCitas(idusuario)
+        citaViewModel.loadMascotas(idusuario.toString())
     }
 
     Column(
@@ -90,7 +90,7 @@ fun CitasScreen(
         )
 
 
-        ListaCitas(citas = citas, citaViewModel, idusuario, veterinarios)
+        ListaCitas(citas = citas, citaViewModel, idusuario, veterinarios,mascotas)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -101,13 +101,21 @@ fun CitasScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        CatalogoServicios(servicios = servicios, onServicioClick, citaViewModel = citaViewModel)
+        CatalogoServicios(
+            servicios = servicios, onServicioClick = onServicioClick, citaViewModel = citaViewModel
+        )
     }
 }
 
 
 @Composable
-fun ListaCitas(citas: List<Citas>, citaViewModel: CitasViewModel, idusuario: Int, veterinarios: List<Veterinarios>) {
+fun ListaCitas(
+    citas: List<Citas>,
+    citaViewModel: CitasViewModel,
+    idusuario: Int,
+    veterinarios: List<Veterinarios>,
+    mascotas: List<Mascotas>
+) {
     val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.45f
     LazyColumn(
         modifier = Modifier
@@ -117,30 +125,34 @@ fun ListaCitas(citas: List<Citas>, citaViewModel: CitasViewModel, idusuario: Int
         contentPadding = PaddingValues(5.dp)
     ) {
         items(citas) { cita ->
-            ItemCita(cita = cita, onCancelClick = {
-                citaViewModel.eliminarCita(cita.id_cita.toInt())
-                citaViewModel.loadCitas(idusuario)
-            },veterinarios)
+            ItemCita(
+                cita = cita,
+                onCancelClick = {
+                    citaViewModel.eliminarCita(cita.id_cita?.toInt() ?: 0)
+                    citaViewModel.loadCitas(idusuario)
+                },
+                veterinario_nombre = veterinarios.find { it.id_veterinario == cita.id_veterinario }?.nombre
+                    ?: "",
+                mascota_nombre = mascotas.find { it.id_mascota == cita.id_mascota.toInt() }?.nombre ?: ""
+            )
         }
     }
 }
 
 @Composable
-fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinarios: List<Veterinarios>) {
+fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinario_nombre: String, mascota_nombre: String) {
     var showMenu by remember { mutableStateOf(false) }
-    val parsedDateTime = reverseParseDateTime(
-        cita.fecha_cita
-    )
-    val dateParts = parsedDateTime["Date"]?.split(", ")
-    val dayOfMonth = dateParts?.get(1)?.split(" ")?.get(0)
-    val month = dateParts?.get(1)?.split(" ")?.get(1)
-    val time = parsedDateTime["Time"]
+    val parsedDateTime = reverseParseDateTime(cita.fecha_cita.toString())
+    val dayOfMonth = parsedDateTime["Day"] ?: ""
+    val month = parsedDateTime["Month"] ?: ""
+    val time = parsedDateTime["Time"] ?: ""
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(5.dp, shape = RoundedCornerShape(12.dp))
-            .background(Color.White), horizontalArrangement = Arrangement.SpaceEvenly
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
@@ -151,16 +163,18 @@ fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinarios: List<Veterina
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = dayOfMonth ?: "",
+                    text = dayOfMonth,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = month ?: "",
+                    text = month,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -171,21 +185,23 @@ fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinarios: List<Veterina
                 .width(160.dp), verticalArrangement = Arrangement.SpaceAround
         ) {
             Text(
-                text = veterinarios.find {  it.id_veterinario == cita.id_veterinario }?.nombre ?: "", fontWeight = FontWeight.Bold, fontSize = 18.sp, maxLines = 1
+                text = veterinario_nombre,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                maxLines = 1
             )
 
-            Text(
-                text = veterinarios.find { it.id_veterinario == cita.id_veterinario }?.especializacion ?:"", fontWeight = FontWeight.Normal, fontSize = 15.sp
-            )
 
             Spacer(modifier = Modifier)
 
             Text(
-                text = time ?: "", fontWeight = FontWeight.SemiBold, fontSize = 18.sp
+                text = time, fontWeight = FontWeight.SemiBold, fontSize = 18.sp
             )
         }
 
         Spacer(modifier = Modifier)
+
+        Text(text = mascota_nombre)
 
         Box(
             modifier = Modifier
@@ -201,9 +217,9 @@ fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinarios: List<Veterina
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                 DropdownMenuItem(onClick = {
                     showMenu = false
-                    onCancelClick
+                    onCancelClick()
                 }, text = {
-                    Text("Cancel Appointment")
+                    Text("Cancelar Cita")
                 })
             }
         }
@@ -211,34 +227,34 @@ fun ItemCita(cita: Citas, onCancelClick: () -> Unit, veterinarios: List<Veterina
 }
 
 
-fun reverseParseDateTime(timestamp: String): Map<String, String> {
-    // Define the formatter for the complete timestamp pattern (yyyy-MM-dd HH:mm:ss)
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+fun reverseParseDateTime(dateTime: String): Map<String, String> {
+    return try {
+        // Update input format for ISO 8601
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val date = inputFormat.parse(dateTime)
 
-    // Parse the timestamp into a LocalDateTime object
-    val parsedDateTime = LocalDateTime.parse(timestamp, formatter)
+        // Output formats for Day, Month, and Time
+        val dayFormat = SimpleDateFormat("dd", Locale.getDefault())
+        val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
 
-    // Format the date part into "EEEE, d MMM" format (e.g., "Wednesday, 4 Dec")
-    val dateFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM", Locale.ENGLISH)
-    val formattedDate = parsedDateTime.format(dateFormatter)
+        // Format the time in 12-hour format with AM/PM
+        val timeFormat =
+            SimpleDateFormat("h:mm a", Locale.getDefault()) // 12-hour format with AM/PM
 
-    // Format the time part into "h:mm a" format (e.g., "10:00 AM")
-    val timeFormatter = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
-    val formattedTime = parsedDateTime.format(timeFormatter)
-
-    // Return the result as a map
-    return mapOf(
-        "Date" to formattedDate,
-        "Time" to formattedTime
-    )
+        mapOf(
+            "Day" to dayFormat.format(date),
+            "Month" to monthFormat.format(date).uppercase(),
+            "Time" to timeFormat.format(date)
+        )
+    } catch (e: Exception) {
+        e.printStackTrace()
+        mapOf("Day" to "Error", "Month" to "Error", "Time" to "Error")
+    }
 }
-
 
 @Composable
 fun CatalogoServicios(
-    servicios: List<Tipo_Servicios>,
-    onServicioClick: () -> Unit,
-    citaViewModel: CitasViewModel
+    servicios: List<Tipo_Servicios>, onServicioClick: () -> Unit, citaViewModel: CitasViewModel
 ) {
     LazyRow {
         items(servicios) { servicio ->
@@ -254,23 +270,19 @@ fun CatalogoServicios(
 
 @Composable
 fun ItemServicio(
-    id: Int,
-    servicio: Tipo_Servicios,
-    onServicioClick: () -> Unit,
-    citaViewModel: CitasViewModel
+    id: Int, servicio: Tipo_Servicios, onServicioClick: () -> Unit, citaViewModel: CitasViewModel
 ) {
     Column(
         modifier = Modifier
             .padding(12.dp)
             .size(120.dp, 140.dp)
             .shadow(10.dp, shape = RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.onBackground)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .clickable {
-                onServicioClick.also {
-                    citaViewModel.updateServicio(servicio.id_servicio)
+                onServicioClick().also {
+                    citaViewModel.updateServicio(idservicio = servicio.id_servicio)
                 }
-            },
-        horizontalAlignment = Alignment.CenterHorizontally
+            }, horizontalAlignment = Alignment.CenterHorizontally
         //verticalArrangement = Arrangement.Center
     ) {
         val painter = painterResource(id = id)
@@ -302,6 +314,16 @@ fun ItemServicio(
 )
 @Composable
 fun PreviewCitasScreen() {
-    CitasScreen()
+    val mockCita = Citas(
+        id_cita = "1",
+        id_veterinario = "1",
+        fecha_cita = "2024-12-04 19:00:00",
+        id_mascota = "1",
+        razon = "Consulta",
+        id_estado = "1",
+        id_servicio = "1",
+        id_usuario = "1"
+    )
+    ItemCita(cita = mockCita, onCancelClick = {}, veterinario_nombre = "Dr. John Doe")
 }
 */

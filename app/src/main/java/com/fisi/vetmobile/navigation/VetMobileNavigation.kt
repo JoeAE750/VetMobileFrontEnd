@@ -38,6 +38,7 @@ import com.fisi.vetmobile.ui.view.RegistroUsuarioScreen
 import com.fisi.vetmobile.ui.view.SeleccionarMascotaCitaScreen
 import com.fisi.vetmobile.ui.view.SeleccionarVeterinarioScreen
 import com.fisi.vetmobile.ui.view.WelcomeScreen
+import com.fisi.vetmobile.ui.viewmodel.CitasViewModel
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,8 @@ fun VetMobileApp(
     )
 
     val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
+    val citaViewModel: CitasViewModel =
+        viewModel(factory = CitasViewModel.Factory, key = "citasViewModel")
     val loginUiState by loginViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -88,7 +91,17 @@ fun VetMobileApp(
         }, gesturesEnabled = false
     ) {
         Scaffold(topBar = {
-            if (currentScreen !in listOf(VetMobileScreen.Welcome, VetMobileScreen.Login, VetMobileScreen.RegistroMascota, VetMobileScreen.RegistroUsuario, VetMobileScreen.Productos)) {
+            if (currentScreen !in listOf(
+                    VetMobileScreen.Welcome,
+                    VetMobileScreen.Login,
+                    VetMobileScreen.RegistroMascota,
+                    VetMobileScreen.RegistroUsuario,
+                    VetMobileScreen.Citas,
+                    VetMobileScreen.Productos,
+                    VetMobileScreen.SeleccionarMascotaCita,
+                    VetMobileScreen.SeleccionarVeterinario
+                )
+            ) {
                 TopAppBar(title = { Text(currentScreen.name) },
                     navigationIcon = { /* Add Navigation Icon if needed */ })
             }
@@ -128,22 +141,34 @@ fun VetMobileApp(
                         onRegisterSuccess = { navController.navigate(VetMobileScreen.Mascotas.name) })
                 }
                 composable(route = VetMobileScreen.Mascotas.name) {
-                    MascotasScreen(idusuario = loginUiState.idusuario,  onAddMascotaClick = {navController.navigate(VetMobileScreen.RegistroMascota.name)})
+                    MascotasScreen(
+                        idusuario = loginUiState.idusuario,
+                        onAddMascotaClick = { navController.navigate(VetMobileScreen.RegistroMascota.name) })
                 }
                 composable(route = VetMobileScreen.RegistroMascota.name) {
-                    RegistrarMascotaScreen(navigateUp = { navController.navigateUp() }, idusuario = loginUiState.idusuario)
+                    RegistrarMascotaScreen(
+                        navigateUp = { navController.navigateUp() },
+                        idusuario = loginUiState.idusuario
+                    )
                 }
                 composable(route = VetMobileScreen.Productos.name) {
                     ProductosScreen()
                 }
                 composable(route = VetMobileScreen.Citas.name) {
-                    CitasScreen(onServicioClick = {navController.navigate(VetMobileScreen.SeleccionarVeterinario.name)}, idusuario = loginUiState.idusuario.toInt())
+                    CitasScreen(
+                        onServicioClick = { navController.navigate(VetMobileScreen.SeleccionarVeterinario.name) },
+                        idusuario = loginUiState.idusuario.toInt(), citaViewModel = citaViewModel
+                    )
                 }
                 composable(route = VetMobileScreen.SeleccionarVeterinario.name) {
-                    SeleccionarVeterinarioScreen()
+                    SeleccionarVeterinarioScreen(onNextClick = { navController.navigate((VetMobileScreen.SeleccionarMascotaCita.name)) },citaViewModel = citaViewModel, onCancelClick = {navController.navigate(VetMobileScreen.Citas.name)})
                 }
                 composable(route = VetMobileScreen.SeleccionarMascotaCita.name) {
-                    SeleccionarMascotaCitaScreen()
+                    SeleccionarMascotaCitaScreen(onFinalizarClick = {
+                        navController.navigate(
+                            VetMobileScreen.Citas.name
+                        )
+                    },citaViewModel = citaViewModel, onCancelClick = {navController.navigate(VetMobileScreen.Citas.name)})
                 }
             }
         }
