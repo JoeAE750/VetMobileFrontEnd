@@ -40,7 +40,6 @@ import com.fisi.vetmobile.ui.view.RegistroUsuarioScreen
 import com.fisi.vetmobile.ui.view.WelcomeScreen
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VetMobileApp(
@@ -128,21 +127,23 @@ fun VetMobileApp(
                         onRegisterSuccess = { navController.navigate(VetMobileScreen.Mascotas.name) })
                 }
                 composable(route = VetMobileScreen.Mascotas.name) {
-                    MascotasScreen(idusuario = loginUiState.idusuario,  onAddMascotaClick = {navController.navigate(VetMobileScreen.RegistroMascota.name)})
+                    MascotasScreen(idusuario = loginUiState.idusuario, onAddMascotaClick = {navController.navigate(VetMobileScreen.RegistroMascota.name)} )
                 }
                 composable(route = VetMobileScreen.RegistroMascota.name) {
                     RegistrarMascotaScreen(navigateUp = { navController.navigateUp() }, idusuario = loginUiState.idusuario)
                 }
                 composable(route = VetMobileScreen.Productos.name) {
-                    ProductosScreen( onCarritoClick = { navController.navigate(VetMobileScreen.Carrito.name)})
+                    ProductosScreen(onCarritoClick = { navController.navigate(VetMobileScreen.Carrito.name) }) // Navegación al carrito
+                }
+                composable(route = VetMobileScreen.Carrito.name) {
+                    CarritoScreen(
+                        carritoViewModel = viewModel(),
+                        onRegresarClick = { navController.navigateUp() } // Regresar a la pantalla anterior
+                    )
                 }
                 composable(route = VetMobileScreen.Citas.name) {
                     CitasScreen()
                 }
-                composable(route = VetMobileScreen.Carrito.name) {
-                    CarritoScreen()
-                }
-
             }
         }
     }

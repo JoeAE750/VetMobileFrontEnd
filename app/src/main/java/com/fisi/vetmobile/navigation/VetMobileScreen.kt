@@ -21,5 +21,5 @@ enum class VetMobileScreen(@StringRes val vista: Int,val icon: ImageVector? = nu
         Opciones(vista = R.string.options, icon = Icons.Filled.Menu),
         Productos(vista = R.string.productos, icon = FontAwesomeIcons.Solid.ShoppingCart),
         Citas(vista = R.string.citas, icon = Icons.Filled.DateRange),
-        Carrito(vista = R.string.carrito, icon = Icons.Filled.ShoppingCart)
+        Carrito(vista = R.string.carrito)
 }

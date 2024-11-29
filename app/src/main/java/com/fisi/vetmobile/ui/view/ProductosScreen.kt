@@ -40,6 +40,7 @@ fun PreviewCatalogo() {
 }
 */package com.fisi.vetmobile.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -71,13 +72,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun ProductosScreen(
-    onCarritoClick:() -> Unit,
+    onCarritoClick: () -> Unit,
+    carritoViewModel: CarritoViewModel = viewModel(), // Aquí obtenemos el ViewModel
     modifier: Modifier = Modifier
-
 ) {
     Scaffold { paddingValues ->
         Box(modifier = modifier.padding(paddingValues)) {
-
             Row(Modifier.fillMaxWidth()) {
                 Image(
                     modifier = modifier
@@ -91,7 +91,7 @@ fun ProductosScreen(
                     contentDescription = "Carrito de Compras",
                     modifier = Modifier
                         .padding(top = 20.dp, start = 110.dp)
-                        .clickable {onCarritoClick})
+                        .clickable { onCarritoClick() })
             }
 
             Column(
@@ -104,46 +104,83 @@ fun ProductosScreen(
             ) {
                 Text(
                     modifier = modifier.align(Alignment.CenterHorizontally),
-                    text = stringResource(id = R.string.welcome_prompt)
+                    text = "Bienvenido a nuestra tienda"
                 )
 
-                val products = listOf(
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
+                // Lista de productos en diferentes categorías
+                val categorias = listOf(
+                    "Juguetes" to listOf(
+                        Productos("1", "Juguete para perro", "Juguete para morder", "5.99", "10","5"),
+                        Productos("1", "Pelota para perro", "Pelota de goma", "7.99", "12","5"),
+                        Productos("1", "Hueso de caucho", "Hueso para morder", "9.99", "8","5"),
+                        Productos("1", "Juguete interactivo", "Juguete para estimular a los perros", "11.99", "5","5")
                     ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 2",
-                        descripcion = "Descripción del producto 2",
-                        precio = "15.99",
-                        stock = "4"
+                    "Comida" to listOf(
+                        Productos("2", "Croquetas para perro", "Comida balanceada", "20.99", "50","5"),
+                        Productos("2", "Comida húmeda para perro", "Comida de lata", "15.99", "30","5"),
+                        Productos("2", "Galletas para perro", "Galletas sabor pollo", "3.99", "100","5"),
+                        Productos("2", "Huesos para perro", "Huesos comestibles", "8.99", "40","5")
                     ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 3",
-                        descripcion = "Descripción del producto 3",
-                        precio = "12.99",
-                        stock = "5"
+                    "Otros" to listOf(
+                        Productos("3", "Collar para perro", "Collar ajustable", "12.99", "15","5"),
+                        Productos("3", "Correa para perro", "Correa de nylon", "7.49", "25","5"),
+                        Productos("3", "Bañera para perro", "Bañera plegable", "35.99", "10","5"),
+                        Productos("3", "Shampoo para perro", "Shampoo suave para piel sensible", "6.99", "30","5")
                     )
                 )
 
-                // Lista de productos
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    items(products) { producto ->
-                        ProductoCardProducto(
-                            producto = producto,
-                            onAddToCartClick = { /* Handle add to cart */ }
-                        )
+                // Mostrar productos por categorías
+                categorias.forEach { (categoria, productos) ->
+                    Text(text = categoria, style = MaterialTheme.typography.titleLarge)
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        items(productos) { producto ->
+                            ProductoCardProducto(
+                                producto = producto,
+                                onAddToCartClick = {
+                                    carritoViewModel.agregarAlCarrito(producto) // Agregar al carrito
+                                }
+                            )
+                        }
                     }
                 }
+
+                // Botón para ver el carrito
+                Button(
+                    onClick = onCarritoClick,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Ver Carrito")
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CategoriaProductos(categoriaNombre: String, productos: List<Productos>) {
+    Column(modifier = Modifier.padding(top = 24.dp)) {
+        Text(
+            text = categoriaNombre,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+        )
+
+        // Mostrar los productos de la categoría en un LazyRow
+        LazyRow(
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+        ) {
+            items(productos) { producto ->
+                ProductoCardProducto(
+                    producto = producto,
+                    onAddToCartClick = { /* Manejar añadir al carrito */ }
+                )
             }
         }
     }
@@ -171,3 +208,4 @@ fun ProductoCardProducto(producto: Productos, onAddToCartClick: () -> Unit) {
         }
     }
 }
+

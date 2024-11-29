@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,79 +24,63 @@ import com.fisi.vetmobile.ui.viewmodel.CarritoViewModel
 
 @Composable
 fun CarritoScreen(
-    carritoViewModel: CarritoViewModel = viewModel()
+    carritoViewModel: CarritoViewModel = viewModel(),
+    onRegresarClick: () -> Unit // Para regresar a la pantalla de productos
 ) {
-    val productosEnCarrito = carritoViewModel.productosEnCarrito
-    val total = carritoViewModel.calcularTotal()
+    Scaffold { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
 
-    // Imagen de fondo
-    val backgroundImage = painterResource(id = R.drawable.fondo1)
-
-    Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        // Imagen de fondo
-        Image(
-            painter = backgroundImage,
-            contentDescription = "Imagen de fondo 1",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .align(Alignment.BottomCenter)
-        )
-
-        // Lista de productos en el carrito
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(productosEnCarrito) { producto ->
-                ProductoCardCarrito(
-                    producto = producto,
-                    onEliminarProductoClick = { carritoViewModel.removeProducto(producto) }
+                // Título de la pantalla
+                Text(
+                    text = "Carrito de Compras",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+
+                // Lista de productos en el carrito
+                val productosEnCarrito = carritoViewModel.productosEnCarrito.value
+                if (productosEnCarrito.isEmpty()) {
+                    Text("El carrito está vacío", style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                        items(productosEnCarrito) { producto ->
+                            ProductoEnCarritoCard(producto = producto, onEliminarClick = {
+                                carritoViewModel.eliminarDelCarrito(producto)
+                            })
+                        }
+                    }
+                }
+
+                // Mostrar el total
+                Spacer(modifier = Modifier.weight(1f)) // Para empujar el total al fondo
+                val total = carritoViewModel.calcularTotal()
+                Text(
+                    text = "Total: \$${"%.2f".format(total)}",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                // Botón de regresar a la pantalla de productos
+                Button(onClick = onRegresarClick) {
+                    Text("Regresar")
+                }
             }
-        }
-
-        // Total del carrito
-        Text(
-            text = "Total: $${total}",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
-        )
-
-        // Botón flotante para añadir productos
-        FloatingActionButton(
-            onClick = { carritoViewModel.addProducto(Productos(id_producto = "1", id_categoria = "1", nombre = "Producto Ejemplo", descripcion = "Descripción del producto", precio = "10.0", stock = "5")) },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Añadir Producto")
         }
     }
 }
 
 @Composable
-fun ProductoCardCarrito(producto: Productos, onEliminarProductoClick: () -> Unit) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF263238)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+fun ProductoEnCarritoCard(producto: Productos, onEliminarClick: () -> Unit) {
+    Card(modifier = Modifier.padding(8.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = producto.nombre,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f) // Asegura que el texto ocupe el espacio restante
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
             )
-
-            IconButton(onClick = { onEliminarProductoClick() }) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Eliminar Producto",
-                    tint = Color.Red
-                )
+            IconButton(onClick = onEliminarClick) {
+                Icon(imageVector = Icons.Filled.Delete, contentDescription = "Eliminar producto")
             }
         }
     }
