@@ -100,7 +100,7 @@ fun TextFieldFormulario(
     isPassword: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.padding(vertical = 4.dp, horizontal = 20.dp)) {
+    Column() {
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -110,9 +110,7 @@ fun TextFieldFormulario(
             ),
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
             colors = TextFieldDefaults.colors(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+            modifier = modifier,
             shape = MaterialTheme.shapes.small,
             singleLine = true
         )

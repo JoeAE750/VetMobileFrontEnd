@@ -44,6 +44,54 @@ import com.fisi.vetmobile.data.model.Productos
 fun ProductosScreen(
     modifier: Modifier = Modifier
 ) {
+
+    val products = listOf(
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+        Productos(
+            id_categoria = "1",
+            nombre = "Producto 1",
+            descripcion = "Descripción del producto 1",
+            precio = "10.99",
+            stock = "2"
+        ),
+    )
+
+
+
     Scaffold { paddingValues ->
         Box(modifier = modifier.padding(paddingValues)) {
 
@@ -74,51 +122,6 @@ fun ProductosScreen(
                     modifier = modifier.align(Alignment.CenterHorizontally),
                     text = stringResource(id = R.string.welcome_prompt)
                 )
-                val products = listOf(
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                    Productos(
-                        id_categoria = "1",
-                        nombre = "Producto 1",
-                        descripcion = "Descripción del producto 1",
-                        precio = "10.99",
-                        stock = "2"
-                    ),
-                )
-
                 ProductCatalogue(modifier = Modifier,
                     products = products,
                     title = "Medicina",

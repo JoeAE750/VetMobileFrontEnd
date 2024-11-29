@@ -11,15 +11,15 @@ interface MascotasRepository {
 }
 
 class NetworkMascotasRepository (
-    private val VetMobileApiService: VetMobileApiService
+    private val vetMobileApiService: VetMobileApiService
 ): MascotasRepository{
 
     override suspend fun registrarMascota(mascota: Mascotas):Response<Mascotas> {
-        return VetMobileApiService.registrarMascota(mascota)
+        return vetMobileApiService.registrarMascota(mascota)
     }
 
     override suspend fun obtenerMascotas(idusuario: String): Response<List<Mascotas>> {
-        return VetMobileApiService.obtenerMascotas(idusuario)
+        return vetMobileApiService.obtenerMascotas(idusuario)
     }
 }
 

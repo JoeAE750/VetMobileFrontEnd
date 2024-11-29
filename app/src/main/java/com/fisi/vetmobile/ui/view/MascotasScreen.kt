@@ -1,6 +1,5 @@
 package com.fisi.vetmobile.ui.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,11 +30,15 @@ import compose.icons.fontawesomeicons.solid.Cat
 import compose.icons.fontawesomeicons.solid.Dog
 
 @Composable
-fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = MascotasViewModel.Factory), idusuario: String, onAddMascotaClick: () -> Unit) {
+fun MascotasScreen(
+    mascotaViewModel: MascotasViewModel = viewModel(factory = MascotasViewModel.Factory),
+    idusuario: String,
+    onAddMascotaClick: () -> Unit
+) {
 
     val mascotas by mascotaViewModel.mascotas.collectAsState()
 
-    LaunchedEffect(idusuario,) {
+    LaunchedEffect(idusuario) {
         mascotaViewModel.loadMascotas(idusuario)
     }
 
@@ -45,23 +47,11 @@ fun MascotasScreen(mascotaViewModel: MascotasViewModel = viewModel(factory = Mas
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Imagen de fondo solo en la parte inferior
-        val backgroundImage = painterResource(id = com.fisi.vetmobile.R.drawable.img_2) // Asegúrate de tener la imagen en res/drawable
-        Image(
-            painter = backgroundImage,
-            contentDescription = "Imagen de fondo",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp) // Ajusta la altura de la imagen para que esté solo en la parte inferior
-                .align(Alignment.BottomCenter) // La imagen se posiciona en la parte inferior
-        )
 
-        // Contenido de la pantalla
         Column {
             MascotasList(Modifier.padding(), mascotas)
         }
 
-        // FloatingActionButton en la parte inferior derecha
         FloatingActionButton(
             onClick = onAddMascotaClick,
             modifier = Modifier
@@ -99,7 +89,7 @@ fun MascotaCard(petName: String, petType: String, petRaza: String) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icono dependiendo de la especie
+
             if (petType == "1") {
                 Icon(
                     imageVector = FontAwesomeIcons.Solid.Dog,

@@ -1,3 +1,10 @@
 package com.fisi.vetmobile.ui.uistate
 
-//data class CitasUiState()
+data class CitasUiState(
+    val timestamp: String = "",
+    val id_veterinario: String = "",
+    val id_mascota: String = "",
+    val razon: String = "",
+    val id_servicio: String = "",
+    val id_usuario: String = ""
+)

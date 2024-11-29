@@ -13,13 +13,13 @@ interface UsuariosRepository{
 }
 
 class NetworkUsuariosRepository(
-    private val VetMobileApiService: VetMobileApiService
+    private val vetMobileApiService: VetMobileApiService
 ): UsuariosRepository {
     override suspend fun verificarLogin(loginRequest: LoginRequest): LoginResponse {
-        return VetMobileApiService.verificarLogin(loginRequest)
+        return vetMobileApiService.verificarLogin(loginRequest)
     }
 
     override suspend fun registrarUsuario(usuarios: Usuarios):Response<Usuarios> {
-        return VetMobileApiService.registrarUsuario(usuarios)
+        return vetMobileApiService.registrarUsuario(usuarios)
     }
 }

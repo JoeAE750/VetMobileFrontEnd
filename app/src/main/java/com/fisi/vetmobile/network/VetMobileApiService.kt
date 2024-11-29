@@ -1,7 +1,10 @@
 package com.fisi.vetmobile.network
 
+import com.fisi.vetmobile.data.model.Citas
 import com.fisi.vetmobile.data.model.Mascotas
+import com.fisi.vetmobile.data.model.Tipo_Servicios
 import com.fisi.vetmobile.data.model.Usuarios
+import com.fisi.vetmobile.data.model.Veterinarios
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -25,4 +28,18 @@ interface VetMobileApiService {
     @GET("mascotas/usuario")
     suspend fun obtenerMascotas(@Query("id_usuario") idusuario: String): Response<List<Mascotas>>
 
+    @GET("tipo_servicio")
+    suspend fun obtenerServicios(): Response<List<Tipo_Servicios>>
+
+    @GET("citas/usuario/{id_usuario}")
+    suspend fun getCitas(@Path("id_usuario") idusuario: Int): Response<List<Citas>>
+
+    @DELETE("citas/{id_cita}")
+    suspend fun eliminarCita(@Path("id_cita") idcita: Int)
+
+    @GET("veterinarios")
+    suspend fun getVeterinarios(): Response<List<Veterinarios>>
+
+    @POST("citas")
+    suspend fun crearCita(@Body cita: Citas): Response<Citas>
 }

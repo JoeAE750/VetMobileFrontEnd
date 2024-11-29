@@ -20,4 +20,6 @@ enum class VetMobileScreen(@StringRes val vista: Int,val icon: ImageVector? = nu
         Opciones(vista = R.string.options, icon = Icons.Filled.Menu),
         Productos(vista = R.string.productos, icon =  FontAwesomeIcons.Solid.ShoppingCart),
         Citas(vista = R.string.citas, icon = Icons.Filled.DateRange),
+        SeleccionarVeterinario(vista = R.string.seleccionarveterinario),
+        SeleccionarMascotaCita(vista = R.string.seleccionarmascotacita)
 }

@@ -10,4 +10,6 @@
     <string name="citas">citas</string>
     <string name="agregar_mascota">Agregar Mascota</string>
     <string name="welcome_prompt">Bienvenidos</string>
+    <string name="seleccionarveterinario">SeleccionarVeterinario</string>
+    <string name="seleccionarmascotacita">SeleccionarMascotaCita</string>
 </resources>

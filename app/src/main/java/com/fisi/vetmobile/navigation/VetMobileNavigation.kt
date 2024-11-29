@@ -35,6 +35,8 @@ import com.fisi.vetmobile.ui.view.MascotasScreen
 import com.fisi.vetmobile.ui.view.ProductosScreen
 import com.fisi.vetmobile.ui.view.RegistrarMascotaScreen
 import com.fisi.vetmobile.ui.view.RegistroUsuarioScreen
+import com.fisi.vetmobile.ui.view.SeleccionarMascotaCitaScreen
+import com.fisi.vetmobile.ui.view.SeleccionarVeterinarioScreen
 import com.fisi.vetmobile.ui.view.WelcomeScreen
 import com.fisi.vetmobile.ui.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -42,7 +44,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VetMobileApp(
-    navController: NavHostController = rememberNavController(), // Aquí inicializamos el NavController
+    navController: NavHostController = rememberNavController(),
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -135,7 +137,13 @@ fun VetMobileApp(
                     ProductosScreen()
                 }
                 composable(route = VetMobileScreen.Citas.name) {
-                    CitasScreen()
+                    CitasScreen(onServicioClick = {navController.navigate(VetMobileScreen.SeleccionarVeterinario.name)}, idusuario = loginUiState.idusuario.toInt())
+                }
+                composable(route = VetMobileScreen.SeleccionarVeterinario.name) {
+                    SeleccionarVeterinarioScreen()
+                }
+                composable(route = VetMobileScreen.SeleccionarMascotaCita.name) {
+                    SeleccionarMascotaCitaScreen()
                 }
             }
         }
